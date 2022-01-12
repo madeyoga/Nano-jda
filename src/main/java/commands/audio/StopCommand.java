@@ -3,7 +3,7 @@ package commands.audio;
 import audio.manager.GuildAudioManager;
 import audio.manager.GuildAudioState;
 import com.jagrosh.jdautilities.command.SlashCommand;
-import commands.utilities.EventValidator;
+import utilities.EventValidator;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;

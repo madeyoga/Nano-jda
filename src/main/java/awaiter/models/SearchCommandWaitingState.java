@@ -1,4 +1,4 @@
-package commands.awaiter.models;
+package awaiter.models;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 

@@ -1,4 +1,4 @@
-package commands.utilities;
+package utilities;
 
 public class TimeFormatter {
     /**

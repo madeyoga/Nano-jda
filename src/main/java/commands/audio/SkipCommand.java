@@ -3,8 +3,7 @@ package commands.audio;
 import audio.manager.GuildAudioState;
 import audio.manager.IGuildAudioManager;
 import com.jagrosh.jdautilities.command.SlashCommand;
-import commands.utilities.EventValidator;
-import net.dv8tion.jda.api.entities.User;
+import utilities.EventValidator;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class SkipCommand extends SlashCommand {

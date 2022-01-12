@@ -4,8 +4,7 @@ import audio.manager.GuildAudioState;
 import audio.manager.IGuildAudioManager;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import commands.utilities.StyledEmbedBuilder;
-import net.dv8tion.jda.api.EmbedBuilder;
+import utilities.StyledEmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class ShowQueueCommand extends SlashCommand {

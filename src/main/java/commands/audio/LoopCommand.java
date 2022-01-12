@@ -3,7 +3,7 @@ package commands.audio;
 import audio.manager.GuildAudioState;
 import audio.manager.IGuildAudioManager;
 import com.jagrosh.jdautilities.command.SlashCommand;
-import commands.utilities.EventValidator;
+import utilities.EventValidator;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 public class LoopCommand extends SlashCommand {

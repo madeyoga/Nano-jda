@@ -1,8 +1,8 @@
-package commands.awaiter;
+package awaiter;
 
 import audio.manager.GuildAudioManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import commands.awaiter.models.SearchCommandWaitingState;
+import awaiter.models.SearchCommandWaitingState;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;

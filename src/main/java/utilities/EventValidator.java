@@ -1,4 +1,4 @@
-package commands.utilities;
+package utilities;
 
 import audio.manager.GuildAudioManager;
 import net.dv8tion.jda.api.entities.VoiceChannel;

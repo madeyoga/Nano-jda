@@ -3,7 +3,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import commands.audio.*;
-import commands.awaiter.SearchCommandResponseWaiter;
+import awaiter.SearchCommandResponseWaiter;
 import commands.info.AvatarCommand;
 import commands.info.HelpCommand;
 import commands.info.PingCommand;

@@ -1,4 +1,4 @@
-package commands.awaiter;
+package awaiter;
 
 public interface IResponseWaiter<T> {
     void register(T state);

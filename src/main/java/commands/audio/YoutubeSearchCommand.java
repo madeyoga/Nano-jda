@@ -1,20 +1,18 @@
 package commands.audio;
 
 import audio.manager.GuildAudioManager;
-import audio.manager.GuildAudioState;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import commands.awaiter.IResponseWaiter;
-import commands.awaiter.SearchCommandResponseWaiter;
-import commands.awaiter.models.SearchCommandWaitingState;
-import commands.utilities.TimeFormatter;
+import awaiter.IResponseWaiter;
+import awaiter.SearchCommandResponseWaiter;
+import awaiter.models.SearchCommandWaitingState;
+import utilities.TimeFormatter;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
 
 import java.util.ArrayList;
