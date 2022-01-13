@@ -19,7 +19,7 @@ public class PauseCommand extends SlashCommand {
 
     @Override
     protected void execute(SlashCommandEvent event) {
-        if (audioManager.isGuildRegistered(event.getGuild())) {
+        if (!audioManager.isGuildRegistered(event.getGuild())) {
             event.reply(":x: Not playing anything").setEphemeral(true).queue();
             return;
         }
