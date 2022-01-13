@@ -6,6 +6,8 @@ import awaiter.models.SearchCommandWaitingState;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,23 +38,22 @@ public class SearchCommandResponseWaiter extends ListenerAdapter implements IRes
 
         String[] id = event.getComponentId().split("-");
 
-        event.deferReply(true).queue();
+        event.deferReply().queue();
 
         SearchCommandWaitingState state = waitingForUsers.getOrDefault(id[0], null);
         if (state == null) {
             event.getHook().setEphemeral(true)
-                    .editOriginal(":x: Could not execute button event: Null waiting state").queue();
+                    .sendMessage(":x: Could not execute button event: Null waiting state").queue();
             return;
         }
+
+        event.getMessage().editMessageComponents(new ArrayList<>()).queue();
 
         int choiceIndex = Integer.parseInt(id[1]) - 1;
         AudioTrack track = state.getChoices().get(choiceIndex);
         track.setUserData(event.getUser().getId());
         GuildAudioManager.play(event.getMember(), audioManager.getAudioState(event.getGuild()), track);
-
-        String response = ":musical_note: Added to queue: " + track.getInfo().title;
-
-        event.getHook().setEphemeral(false).editOriginal(response).queue();
+        event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();
 
         waitingForUsers.remove(id[0]);
     }
