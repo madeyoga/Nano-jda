@@ -36,7 +36,7 @@ public class SearchCommandResponseWaiter extends ListenerAdapter implements IRes
 
         String[] id = event.getComponentId().split("-");
 
-        event.deferReply().queue();
+        event.deferReply(true).queue();
 
         SearchCommandWaitingState state = waitingForUsers.getOrDefault(id[0], null);
         if (state == null) {
@@ -47,9 +47,12 @@ public class SearchCommandResponseWaiter extends ListenerAdapter implements IRes
 
         int choiceIndex = Integer.parseInt(id[1]) - 1;
         AudioTrack track = state.getChoices().get(choiceIndex);
+        track.setUserData(event.getUser().getId());
         GuildAudioManager.play(event.getMember(), audioManager.getAudioState(event.getGuild()), track);
 
-        event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();
+        String response = ":musical_note: Added to queue: " + track.getInfo().title;
+
+        event.getHook().setEphemeral(false).editOriginal(response).queue();
 
         waitingForUsers.remove(id[0]);
     }
