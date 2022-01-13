@@ -3,6 +3,7 @@ package commands.audio;
 import audio.manager.GuildAudioState;
 import audio.manager.IGuildAudioManager;
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import utilities.EventValidator;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
@@ -38,5 +39,13 @@ public class SkipCommand extends SlashCommand {
         }
 
         state.scheduler.nextTrack();
+        AudioTrack playingTrack = state.player.getPlayingTrack();
+        if (playingTrack == null) {
+            event.getHook().editOriginal(":mega: Finished playing current queue.").queue();
+            audioManager.stopAndLeaveVoiceChannel(event.getGuild());
+            return;
+        }
+
+        event.getHook().editOriginal(":musical_note: Now playing " + playingTrack.getInfo().title).queue();
     }
 }

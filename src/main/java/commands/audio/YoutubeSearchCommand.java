@@ -6,8 +6,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import awaiter.IResponseWaiter;
-import awaiter.SearchCommandResponseWaiter;
+import awaiter.IResponseListener;
+import awaiter.SearchCommandResponseListener;
 import awaiter.models.SearchCommandWaitingState;
 import utilities.TimeFormatter;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -22,9 +22,9 @@ import java.util.List;
 
 public class YoutubeSearchCommand extends SlashCommand {
     private final GuildAudioManager audioManager;
-    private final IResponseWaiter<SearchCommandWaitingState> waiter;
+    private final IResponseListener<SearchCommandWaitingState> waiter;
 
-    public YoutubeSearchCommand(GuildAudioManager audioManager, Category category, SearchCommandResponseWaiter waiter) {
+    public YoutubeSearchCommand(GuildAudioManager audioManager, Category category, SearchCommandResponseListener waiter) {
         this.audioManager = audioManager;
         this.waiter = waiter;
         this.category = category;

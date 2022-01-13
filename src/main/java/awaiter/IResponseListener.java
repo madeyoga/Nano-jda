@@ -1,6 +1,6 @@
 package awaiter;
 
-public interface IResponseWaiter<T> {
+public interface IResponseListener<T> {
     void register(T state);
     T getState(String identifier);
 }

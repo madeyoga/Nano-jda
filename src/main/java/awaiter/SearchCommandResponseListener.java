@@ -4,6 +4,7 @@ import audio.manager.GuildAudioManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import awaiter.models.SearchCommandWaitingState;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,11 +12,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SearchCommandResponseWaiter extends ListenerAdapter implements IResponseWaiter<SearchCommandWaitingState> {
+public class SearchCommandResponseListener extends ListenerAdapter implements IResponseListener<SearchCommandWaitingState> {
     private final GuildAudioManager audioManager;
     private final Map<String, SearchCommandWaitingState> waitingForUsers;
 
-    public SearchCommandResponseWaiter(GuildAudioManager audioManager) {
+    public SearchCommandResponseListener(GuildAudioManager audioManager) {
         this.audioManager = audioManager;
         this.waitingForUsers = new ConcurrentHashMap<>();
     }
@@ -56,5 +57,10 @@ public class SearchCommandResponseWaiter extends ListenerAdapter implements IRes
         event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();
 
         waitingForUsers.remove(id[0]);
+    }
+
+    @Override
+    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        super.onMessageReceived(event);
     }
 }

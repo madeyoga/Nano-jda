@@ -3,7 +3,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import commands.audio.*;
-import awaiter.SearchCommandResponseWaiter;
+import awaiter.SearchCommandResponseListener;
 import commands.info.AvatarCommand;
 import commands.info.HelpCommand;
 import commands.info.PingCommand;
@@ -29,7 +29,7 @@ public class Main {
 
         GuildAudioManager audioManager = new GuildAudioManager();
 
-        SearchCommandResponseWaiter searchWaiter = new SearchCommandResponseWaiter(audioManager);
+        SearchCommandResponseListener searchWaiter = new SearchCommandResponseListener(audioManager);
 
         CommandClientBuilder clientBuilder = setupClientBuilderBasicInfo(new CommandClientBuilder());
         clientBuilder.forceGuildOnly("791580705892466689");

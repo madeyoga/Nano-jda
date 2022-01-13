@@ -13,6 +13,7 @@ public interface IGuildAudioManager {
     static void play(Member author, GuildAudioState audioState, AudioTrack track) {}
 
     void loadAndPlay(final GenericInteractionCreateEvent event, String query);
+    void stopAndLeaveVoiceChannel(Guild guild);
     GuildAudioState getAudioState(Guild guild);
     boolean isGuildRegistered(Guild guild);
     Map<String, GuildAudioState> getAudioStates();

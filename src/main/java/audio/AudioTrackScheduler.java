@@ -47,6 +47,18 @@ public class AudioTrackScheduler extends AudioEventAdapter {
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+//        if (queue.isEmpty()) {
+//            TextChannel channel = jda.getTextChannelById(textChannelId);
+//            if (channel != null){
+//                channel.sendMessage(":mega: Finished playing current queue").queue();
+//                channel.getGuild().getAudioManager().closeAudioConnection();
+//
+//                // remove state from audio manager.
+//                // ...
+//            }
+//            return;
+//        }
+
         if (endReason.mayStartNext) {
             nextTrack();
         }

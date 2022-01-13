@@ -108,6 +108,14 @@ public class GuildAudioManager implements IGuildAudioManager {
         audioState.scheduler.queue(track);
     }
 
+    public void stopAndLeaveVoiceChannel(Guild guild) {
+        guild.getAudioManager().closeAudioConnection();
+        GuildAudioState audioState = getAudioState(guild);
+        audioState.player.destroy();
+        audioState.scheduler.getQueue().clear();
+        removeAudioState(guild);
+    }
+
     @Override
     public synchronized GuildAudioState getAudioState(Guild guild) {
         String guildId = guild.getId();
