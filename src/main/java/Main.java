@@ -35,19 +35,20 @@ public class Main {
         clientBuilder.forceGuildOnly("791580705892466689");
         clientBuilder.addSlashCommand(new JoinCommand(audioCategory));
         clientBuilder.addSlashCommand(new LoopCommand(audioManager, audioCategory));
-        clientBuilder.addSlashCommand(new StopCommand(audioManager, audioCategory));
-        clientBuilder.addSlashCommand(new PlayCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new NowPlayCommand(audioManager, audioCategory));
+        clientBuilder.addSlashCommand(new PauseCommand(audioManager, audioCategory));
+        clientBuilder.addSlashCommand(new PlayCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new ShowQueueCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new ShuffleQueueCommand(audioManager, audioCategory));
+        clientBuilder.addSlashCommand(new StopCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new YoutubeSearchCommand(audioManager, audioCategory, searchWaiter));
 
         HelpCommand helpCommand = new HelpCommand(infoCategory);
-        clientBuilder.addSlashCommand(helpCommand);
         clientBuilder.addSlashCommand(new AvatarCommand(infoCategory));
+        clientBuilder.addSlashCommand(helpCommand);
         clientBuilder.addSlashCommand(new PingCommand(infoCategory));
 
-        clientBuilder.setActivity(Activity.playing("Loading..."));
+        clientBuilder.setActivity(Activity.playing("development"));
 
         CommandClient commandClient = clientBuilder.build();
 
