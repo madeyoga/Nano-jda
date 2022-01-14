@@ -1,5 +1,6 @@
 package commands.info;
 
+import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -43,25 +44,10 @@ public class HelpCommand extends SlashCommand {
     public void addCommands(List<SlashCommand> commandList) {
         for (SlashCommand command : commandList) {
             if (command.getCategory() == null) {
-                this.logger.warn("Skipping " + command.getName() + " command. Command does not have category set");
+                this.logger.warn("Skipping '" + command.getName() + "'. Command does not belong to any category");
                 continue;
             }
-            String categoryName = command.getCategory().getName();
-
-            String currentSubtitleState = "";
-
-            if (!commandMap.containsKey(categoryName)) {
-                commandMap.put(categoryName, currentSubtitleState);
-            }
-            else {
-                currentSubtitleState = commandMap.get(categoryName);
-            }
-
-            String commandName = "`" + command.getName() + "` ";
-
-            currentSubtitleState += commandName;
-
-            commandMap.put(categoryName, currentSubtitleState);
+            addCommand(command);
         }
 
         commandMap.replaceAll((k, v) -> v.trim());
@@ -74,10 +60,28 @@ public class HelpCommand extends SlashCommand {
 
         User self = jda.getSelfUser();
         this.builder.setAuthor("Nano Help", "https://github.com/madeyoga/Nano-Bot", self.getAvatarUrl());
-        this.builder.setFooter("Thanks for using Nano", self.getAvatarUrl());
+        this.builder.setDescription("");
+        this.builder.setFooter("Thanks for using Nano!", self.getAvatarUrl());
 
         this.builder.setColor(Color.RED);
 
         this.commandMap.clear();
+    }
+
+    private void addCommand(Command command) {
+        String categoryName = command.getCategory().getName();
+
+        String currentSubtitleState = "";
+
+        if (!commandMap.containsKey(categoryName)) {
+            commandMap.put(categoryName, currentSubtitleState);
+        }
+        else {
+            currentSubtitleState = commandMap.get(categoryName);
+        }
+
+        currentSubtitleState += "`" + command.getName() + "` ";
+
+        commandMap.put(categoryName, currentSubtitleState);
     }
 }

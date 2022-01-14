@@ -49,15 +49,15 @@ public class YoutubeSearchCommand extends SlashCommand {
             new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
-                    System.out.println("Loaded single track");
                     List<AudioTrack> tracks = new ArrayList<>();
                     tracks.add(track);
 
-                    waiter.register(new SearchCommandWaitingState(tracks, event.getUser().getId(), event.getId()));
+                    waiter.register(new SearchCommandWaitingState(tracks,
+                            event.getUser().getId(), event.getId(), event.getChannel().getId()));
 
                     String response = String.format(
                             "Search result for: %s\n\n1. %s [%s]",
-                            arguments, track.getInfo().title, TimeFormatter.getDurationFormat(track.getDuration()));
+                            arguments, track.getInfo().title, TimeFormatter.durationFormat(track.getDuration()));
                     event.getHook().sendMessage(response)
                             .addActionRow(Button.primary(event.getId() + "-1", "1"))
                             .queue();
@@ -75,8 +75,8 @@ public class YoutubeSearchCommand extends SlashCommand {
                         String currentIndex = String.format("%s", i + 1);
 
                         AudioTrack track = playlist.getTracks().get(i);
-                        String row = String.format("\n%s. **%s** [%s]", currentIndex, track.getInfo().title,
-                                TimeFormatter.getDurationFormat(track.getDuration()));
+                        String row = String.format("\n%s. %s [%s]", currentIndex, track.getInfo().title,
+                                TimeFormatter.durationFormat(track.getDuration()));
                         builder.append(row);
 
                         actions.add(Button.primary(event.getId() + "-" + currentIndex, currentIndex));
@@ -86,7 +86,8 @@ public class YoutubeSearchCommand extends SlashCommand {
                         if (i == 4) break;
                     }
 
-                    waiter.register(new SearchCommandWaitingState(tracks, event.getUser().getId(), event.getId()));
+                    waiter.register(new SearchCommandWaitingState(tracks,
+                            event.getUser().getId(), event.getId(), event.getChannel().getId()));
 
                     event.reply(builder.toString())
                             .addActionRow(actions)
