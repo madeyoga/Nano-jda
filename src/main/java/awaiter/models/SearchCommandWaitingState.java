@@ -10,12 +10,14 @@ public class SearchCommandWaitingState implements IWaitingState {
     private final String authorId;
 
     private final String eventId;
+    private final String channelId;
     private final long sentTime;
 
-    public SearchCommandWaitingState(List<AudioTrack> choices, String authorId, String eventId) {
+    public SearchCommandWaitingState(List<AudioTrack> choices, String authorId, String eventId, String channelId) {
         this.choices = choices;
         this.authorId = authorId;
         this.eventId = eventId;
+        this.channelId = channelId;
         this.sentTime = System.currentTimeMillis();
     }
 
@@ -34,6 +36,10 @@ public class SearchCommandWaitingState implements IWaitingState {
 
     public String getEventId() {
         return eventId;
+    }
+
+    public String getChannelId() {
+        return channelId;
     }
 
     public long getSentTime() {

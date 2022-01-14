@@ -1,4 +1,4 @@
-package commands.info;
+package commands.application.info;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.SlashCommand;

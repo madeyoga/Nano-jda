@@ -1,4 +1,4 @@
-package commands.audio;
+package commands.application.audio;
 
 import audio.manager.GuildAudioManager;
 import com.jagrosh.jdautilities.command.SlashCommand;

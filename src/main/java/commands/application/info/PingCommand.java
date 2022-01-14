@@ -1,4 +1,4 @@
-package commands.info;
+package commands.application.info;
 
 import com.jagrosh.jdautilities.command.SlashCommand;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;

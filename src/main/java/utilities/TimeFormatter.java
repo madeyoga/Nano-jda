@@ -6,7 +6,7 @@ public class TimeFormatter {
      * @param durationMillis
      * @return String formatted duration
      */
-    public static String getDurationFormat(long durationMillis){
+    public static String durationFormat(long durationMillis){
         int seconds = (int) durationMillis / 1000;
         String format = "";
         if (seconds > 3600) {
@@ -23,7 +23,7 @@ public class TimeFormatter {
      * @param durationMillis
      * @return Formatted Minute
      */
-    public static String getMinuteFormat(long durationMillis){
+    public static String minuteFormat(long durationMillis){
         String durationMinute = String.valueOf((int)(durationMillis/1000)/60);
         String durationSecond = String.valueOf((int)(durationMillis/1000)%60);
         if (durationMinute.length() == 1) durationMinute = "0" + durationMinute;

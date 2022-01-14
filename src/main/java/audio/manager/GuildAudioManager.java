@@ -78,7 +78,7 @@ public class GuildAudioManager implements IGuildAudioManager {
                     track.setUserData(event.getUser().getId());
                 }
                 String response = String.format(
-                        ":musical_note: Added to the queue: %s entries from %s", playlist.getTracks().size(), playlist.getName());
+                        ":musical_note: Added to queue: %s entries from %s", playlist.getTracks().size(), playlist.getName());
                 event.getHook().sendMessage(response).queue();
             }
 

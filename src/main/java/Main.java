@@ -2,11 +2,11 @@ import audio.manager.GuildAudioManager;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import commands.audio.*;
+import commands.application.audio.*;
 import awaiter.SearchCommandResponseListener;
-import commands.info.AvatarCommand;
-import commands.info.HelpCommand;
-import commands.info.PingCommand;
+import commands.application.info.AvatarCommand;
+import commands.application.info.HelpCommand;
+import commands.application.info.PingCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -40,6 +40,7 @@ public class Main {
         clientBuilder.addSlashCommand(new PlayCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new ShowQueueCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new ShuffleQueueCommand(audioManager, audioCategory));
+        clientBuilder.addSlashCommand(new SkipCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new StopCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new YoutubeSearchCommand(audioManager, audioCategory, searchWaiter));
 

@@ -1,4 +1,4 @@
-package commands.audio;
+package commands.application.audio;
 
 import audio.manager.GuildAudioState;
 import audio.manager.IGuildAudioManager;

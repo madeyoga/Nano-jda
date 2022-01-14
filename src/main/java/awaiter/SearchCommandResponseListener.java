@@ -33,7 +33,6 @@ public class SearchCommandResponseListener extends ListenerAdapter implements IR
 
     @Override
     public void onButtonClick(@NotNull ButtonClickEvent event) {
-        super.onButtonClick(event);
         if (event.getGuild() == null) return;
         if (event.getUser().isBot()) return;
 
@@ -48,13 +47,17 @@ public class SearchCommandResponseListener extends ListenerAdapter implements IR
             return;
         }
 
-        event.getMessage().editMessageComponents(new ArrayList<>()).queue();
-
         int choiceIndex = Integer.parseInt(id[1]) - 1;
         AudioTrack track = state.getChoices().get(choiceIndex);
         track.setUserData(event.getUser().getId());
         GuildAudioManager.play(event.getMember(), audioManager.getAudioState(event.getGuild()), track);
-        event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();
+
+        event.getMessage().editMessageComponents(new ArrayList<>()).queue();
+
+        event.getMessage().editMessage(":musical_note: Added to queue: " + track.getInfo().title).queue();
+
+//        event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();
+        event.getHook().deleteOriginal().queue();
 
         waitingForUsers.remove(id[0]);
     }
