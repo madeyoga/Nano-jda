@@ -81,6 +81,7 @@ public class Main {
                                                                    ClientProfile profile) {
         builder.setOwnerId(profile.getOwnerId());
         builder.setPrefix(profile.getPrefix());
+        builder.useHelpBuilder(false);
 
         return builder;
     }
@@ -101,8 +102,7 @@ public class Main {
         // Disable presence updates and typing events and more Guild Events
         builder.disableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGE_TYPING,
                 GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_BANS,
-                GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_EMOJIS,
-                GatewayIntent.GUILD_MESSAGES);
+                GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_EMOJIS);
 
         builder.disableIntents(GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_TYPING,
                 GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGES);
