@@ -1,6 +1,7 @@
 package utilities;
 
 import audio.manager.GuildAudioManager;
+import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -12,6 +13,11 @@ public class EventValidator {
     }
 
     public static boolean isValidAuthorVoice(MessageReceivedEvent event) {
+        VoiceChannel authorVoiceChannel = event.getMember().getVoiceState().getChannel();
+        return authorVoiceChannel != null;
+    }
+
+    public static boolean isValidAuthorVoice(CommandEvent event) {
         VoiceChannel authorVoiceChannel = event.getMember().getVoiceState().getChannel();
         return authorVoiceChannel != null;
     }
