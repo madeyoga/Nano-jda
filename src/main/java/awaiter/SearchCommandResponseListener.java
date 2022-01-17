@@ -4,13 +4,11 @@ import audio.manager.GuildAudioManager;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import awaiter.models.SearchCommandWaitingState;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,21 +55,22 @@ public class SearchCommandResponseListener extends ListenerAdapter implements IR
                     .sendMessage(":x: Could not execute button event: Not author").queue();
             return;
         }
+
         if (id[1].equalsIgnoreCase("cancel")) {
-            event.getMessage().editMessage(":x: Canceled").queue();
-            return;
+            event.getMessage().editMessage(":x: Cancelled").queue();
         }
-        int choiceIndex = Integer.parseInt(id[1]) - 1;
-        AudioTrack track = state.getChoices().get(choiceIndex);
-        track.setUserData(event.getUser().getId());
-        GuildAudioManager.play(event.getMember(), audioManager.getAudioState(event.getGuild()), track);
+        else {
+            int choiceIndex = Integer.parseInt(id[1]) - 1;
+            AudioTrack track = state.getChoices().get(choiceIndex);
+            track.setUserData(event.getUser().getId());
+            GuildAudioManager.play(event.getMember(), audioManager.getAudioState(event.getGuild()), track);
 
+//            event.getMessage().editMessage(":musical_note: Added to queue: " + track.getInfo().title).queue();
+            event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();;
+        }
+
+//        event.getHook().deleteOriginal().queue();
         event.getMessage().editMessageComponents(new ArrayList<>()).queue();
-
-        event.getMessage().editMessage(":musical_note: Added to queue: " + track.getInfo().title).queue();
-
-//        event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();
-        event.getHook().deleteOriginal().queue();
 
         waitingForUsers.remove(id[0]);
     }
