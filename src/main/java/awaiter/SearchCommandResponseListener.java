@@ -65,12 +65,12 @@ public class SearchCommandResponseListener extends ListenerAdapter implements IR
             track.setUserData(event.getUser().getId());
             GuildAudioManager.play(event.getMember(), audioManager.getAudioState(event.getGuild()), track);
 
-//            event.getMessage().editMessage(":musical_note: Added to queue: " + track.getInfo().title).queue();
-            event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();;
+            event.getMessage().editMessage(":musical_note: Added to queue: " + track.getInfo().title).queue();
+//            event.getHook().editOriginal(":musical_note: Added to queue: " + track.getInfo().title).queue();
         }
 
-//        event.getHook().deleteOriginal().queue();
         event.getMessage().editMessageComponents(new ArrayList<>()).queue();
+        event.getHook().deleteOriginal().queue();
 
         waitingForUsers.remove(id[0]);
     }
