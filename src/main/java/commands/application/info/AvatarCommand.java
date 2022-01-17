@@ -14,7 +14,7 @@ public class AvatarCommand extends SlashCommand {
 
     public AvatarCommand(Category category) {
         this.name = "avatar";
-        this.help = "Shows mentioned user's avatar";
+        this.help = "Get user's avatar";
         this.options = Collections.singletonList(
                 new OptionData(OptionType.USER, "mention", "Mention the user").setRequired(true)
         );

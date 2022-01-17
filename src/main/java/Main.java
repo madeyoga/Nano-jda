@@ -1,4 +1,5 @@
 import audio.manager.GuildAudioManager;
+import client.ClientProfile;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
@@ -7,6 +8,7 @@ import awaiter.SearchCommandResponseListener;
 import commands.application.info.AvatarCommand;
 import commands.application.info.HelpCommand;
 import commands.application.info.PingCommand;
+import exceptions.NullTokenException;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -16,12 +18,13 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
+import java.io.FileNotFoundException;
 
 public class Main {
-    public static void main(String[] args) throws LoginException {
-        String botToken = System.getenv("NR_TOKEN");
+    public static void main(String[] args) throws LoginException, FileNotFoundException, NullTokenException {
+        ClientProfile clientProfile = ClientProfile.from("settings.txt");
 
-        JDABuilder jdaBuilder = JDABuilder.createDefault(botToken);
+        JDABuilder jdaBuilder = JDABuilder.createDefault(clientProfile.getToken());
         configureMemoryUsage(jdaBuilder);
 
         Command.Category audioCategory = new Command.Category("Audio Commands");
@@ -31,7 +34,7 @@ public class Main {
 
         SearchCommandResponseListener searchWaiter = new SearchCommandResponseListener(audioManager);
 
-        CommandClientBuilder clientBuilder = setupClientBuilderBasicInfo(new CommandClientBuilder());
+        CommandClientBuilder clientBuilder = setupClientBuilderBasicInfo(new CommandClientBuilder(), clientProfile);
         clientBuilder.forceGuildOnly("791580705892466689");
         clientBuilder.addSlashCommand(new JoinCommand(audioCategory));
         clientBuilder.addSlashCommand(new LoopCommand(audioManager, audioCategory));
@@ -49,6 +52,17 @@ public class Main {
         clientBuilder.addSlashCommand(helpCommand);
         clientBuilder.addSlashCommand(new PingCommand(infoCategory));
 
+        // classic message command
+//        clientBuilder.addCommand(new commands.classic.audio.JoinCommand(audioCategory));
+//        clientBuilder.addCommand(new commands.classic.audio.LoopCommand(audioManager, audioCategory));
+//        clientBuilder.addCommand(new commands.classic.audio.NowPlayCommand(audioManager, audioCategory));
+//        clientBuilder.addCommand(new commands.classic.audio.PauseCommand(audioManager, audioCategory));
+//        clientBuilder.addCommand(new commands.classic.audio.PlayCommand(audioManager, audioCategory));
+//        clientBuilder.addCommand(new commands.classic.audio.ShowQueueCommand(audioManager, audioCategory));
+//        clientBuilder.addCommand(new commands.classic.audio.ShuffleQueueCommand(audioManager, audioCategory));
+//        clientBuilder.addCommand(new commands.classic.audio.SkipCommand(audioManager, audioCategory));
+//        clientBuilder.addCommand(new commands.classic.audio.StopCommand(audioManager, audioCategory));
+
         clientBuilder.setActivity(Activity.playing("development"));
 
         CommandClient commandClient = clientBuilder.build();
@@ -63,9 +77,10 @@ public class Main {
         helpCommand.buildEmbed(jda);
     }
 
-    public static CommandClientBuilder setupClientBuilderBasicInfo(CommandClientBuilder builder) {
-        builder.setOwnerId("213866895806300161");
-        builder.setPrefix("n>");
+    public static CommandClientBuilder setupClientBuilderBasicInfo(CommandClientBuilder builder,
+                                                                   ClientProfile profile) {
+        builder.setOwnerId(profile.getOwnerId());
+        builder.setPrefix(profile.getPrefix());
 
         return builder;
     }
@@ -87,10 +102,10 @@ public class Main {
         builder.disableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGE_TYPING,
                 GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_BANS,
                 GatewayIntent.GUILD_INVITES, GatewayIntent.GUILD_EMOJIS,
-                GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES);
+                GatewayIntent.GUILD_MESSAGES);
 
         builder.disableIntents(GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_TYPING,
-                GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+                GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGES);
 
         // Consider guilds with more than 50 members as "large".
         // Large guilds will only provide online members in their setup and thus reduce bandwidth if chunking is disabled.

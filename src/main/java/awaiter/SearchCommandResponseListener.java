@@ -5,10 +5,12 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import awaiter.models.SearchCommandWaitingState;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,6 +33,10 @@ public class SearchCommandResponseListener extends ListenerAdapter implements IR
         return waitingForUsers.get(identifier);
     }
 
+    /**
+     * Currently using button event id as identifier
+     * @param event
+     */
     @Override
     public void onButtonClick(@NotNull ButtonClickEvent event) {
         if (event.getGuild() == null) return;
@@ -46,7 +52,15 @@ public class SearchCommandResponseListener extends ListenerAdapter implements IR
                     .sendMessage(":x: Could not execute button event: Null waiting state").queue();
             return;
         }
-
+        if (!state.getAuthorId().equals(event.getUser().getId())) {
+            event.getHook().setEphemeral(true)
+                    .sendMessage(":x: Could not execute button event: Not author").queue();
+            return;
+        }
+        if (id[1].equalsIgnoreCase("cancel")) {
+            event.getMessage().editMessage(":x: Canceled").queue();
+            return;
+        }
         int choiceIndex = Integer.parseInt(id[1]) - 1;
         AudioTrack track = state.getChoices().get(choiceIndex);
         track.setUserData(event.getUser().getId());
@@ -62,8 +76,28 @@ public class SearchCommandResponseListener extends ListenerAdapter implements IR
         waitingForUsers.remove(id[0]);
     }
 
+    /**
+     * Using author id as identifier.
+     * @param event
+     */
     @Override
-    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        super.onMessageReceived(event);
+    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) return;
+        if (!event.getMessage().getContentRaw().matches("\\d+")) return;
+        if (!waitingForUsers.containsKey(event.getAuthor().getId())) return;
+
+        SearchCommandWaitingState state = waitingForUsers.getOrDefault(event.getAuthor().getId(), null);
+        if (state == null) {
+            return;
+        }
+
+        int choiceIndex = Integer.parseInt(event.getMessage().getContentRaw()) - 1;
+        AudioTrack track = state.getChoices().get(choiceIndex);
+        track.setUserData(event.getAuthor().getId());
+        GuildAudioManager.play(event.getMember(), audioManager.getAudioState(event.getGuild()), track);
+
+        event.getChannel().sendMessage(":musical_note: Added to queue: " + track.getInfo().title).queue();
+
+        waitingForUsers.remove(event.getAuthor().getId());
     }
 }

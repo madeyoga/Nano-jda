@@ -1,26 +1,21 @@
-package commands.application.audio;
+package commands.classic.audio;
 
 import audio.manager.GuildAudioManager;
-import com.jagrosh.jdautilities.command.SlashCommand;
+import awaiter.IResponseListener;
+import awaiter.SearchCommandResponseListener;
+import awaiter.models.SearchCommandWaitingState;
+import com.jagrosh.jdautilities.command.Command;
+import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import awaiter.IResponseListener;
-import awaiter.SearchCommandResponseListener;
-import awaiter.models.SearchCommandWaitingState;
 import utilities.TimeFormatter;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.components.Button;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-public class YoutubeSearchCommand extends SlashCommand {
+public class YoutubeSearchCommand extends Command {
     private final GuildAudioManager audioManager;
     private final IResponseListener<SearchCommandWaitingState> waiter;
 
@@ -28,23 +23,26 @@ public class YoutubeSearchCommand extends SlashCommand {
         this.audioManager = audioManager;
         this.waiter = waiter;
         this.category = category;
-        this.name = "ytsearch";
+        this.name = "search";
         this.help = "Search and pick audio track to play from youtube.";
-        this.options = Collections.singletonList(
-            new OptionData(OptionType.STRING, "query", "Specify the search keywords").setRequired(true)
-        );
         this.guildOnly = true;
+        this.aliases = new String[] {"s"};
     }
 
     @Override
-    protected void execute(SlashCommandEvent event) {
+    protected void execute(CommandEvent event) {
 
         if (event.getMember().getVoiceState().getChannel() == null) {
-            event.reply(":x: You're not in a voice channel").queue();
+            event.reply(":x: You're not in a voice channel");
+            return;
+        }
+        final String arguments = event.getArgs();
+
+        if (arguments.isEmpty()) {
+            event.reply(":x: Could not execute search command. Query option was null.");
             return;
         }
 
-        final String arguments = event.getOption("query").getAsString();
         audioManager.getPlayerManager().loadItem("ytsearch:" + arguments,
             new AudioLoadResultHandler() {
                 @Override
@@ -53,24 +51,17 @@ public class YoutubeSearchCommand extends SlashCommand {
                     tracks.add(track);
 
                     waiter.register(new SearchCommandWaitingState(tracks,
-                            event.getUser().getId(), event.getId(), event.getChannel().getId()));
+                            event.getAuthor().getId(), event.getEvent().getMessageId(), event.getChannel().getId()));
 
                     String response = String.format(
                             "Search result for: %s\n\n1. %s [%s]",
                             arguments, track.getInfo().title, TimeFormatter.durationFormat(track.getDuration()));
-                    event.getHook().sendMessage(response)
-                            .addActionRow(
-                                    Button.primary(event.getId() + "-1", "1"),
-                                    Button.primary(event.getId() + "-cancel", "Cancel")
-                            )
-                            .queue();
+                    event.getChannel().sendMessage(response).queue();
                 }
 
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
                     List<AudioTrack> tracks = new ArrayList<>();
-
-                    Collection<Button> actions = new ArrayList<>();
 
                     StringBuilder builder = new StringBuilder();
                     builder.append("Search result for: ").append(arguments).append("\n");
@@ -82,31 +73,25 @@ public class YoutubeSearchCommand extends SlashCommand {
                                 TimeFormatter.durationFormat(track.getDuration()));
                         builder.append(row);
 
-                        actions.add(Button.primary(event.getId() + "-" + currentIndex, currentIndex));
-
                         tracks.add(track);
 
-                        if (i == 3) break;
+                        if (i == 4) break;
                     }
 
-                    actions.add(Button.primary(event.getId() + "-cancel", "Cancel"));
-
                     waiter.register(new SearchCommandWaitingState(tracks,
-                            event.getUser().getId(), event.getId(), event.getChannel().getId()));
+                            event.getAuthor().getId(), event.getMessage().getId(), event.getChannel().getId()));
 
-                    event.reply(builder.toString())
-                            .addActionRow(actions)
-                            .queue();
+                    event.reply(builder.toString());
                 }
 
                 @Override
                 public void noMatches() {
-                    event.getHook().editOriginal(":x: Nothing found by **" + arguments + "**").queue();
+                    event.getChannel().sendMessage(":x: Nothing found by **" + arguments + "**").queue();
                 }
 
                 @Override
                 public void loadFailed(FriendlyException exception) {
-                    event.getHook().editOriginal(":x: Could not load: " + exception.getMessage()).queue();
+                    event.getChannel().sendMessage(":x: Could not load: " + exception.getMessage()).queue();
                 }
             }
         );

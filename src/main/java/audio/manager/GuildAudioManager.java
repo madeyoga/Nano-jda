@@ -1,5 +1,6 @@
 package audio.manager;
 
+import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioConfiguration;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -90,6 +91,59 @@ public class GuildAudioManager implements IGuildAudioManager {
             @Override
             public void loadFailed(FriendlyException exception) {
                 event.getHook().sendMessage(":x: Could not play: " + exception.getMessage()).queue();
+            }
+        });
+    }
+
+    public void loadAndPlay(final CommandEvent event, String query) {
+        if (event.getGuild() == null) return;
+
+        GuildAudioState audioState = getAudioState(event.getGuild());
+        Member author = event.getMember();
+
+        boolean isKeywords = false;
+        if (!query.startsWith("http") && !query.startsWith("ytsearch:")) {
+            query = "ytsearch:" + query;
+            isKeywords = true;
+        }
+
+        final String queryFinal = query;
+        final boolean isKeywordsFinal = isKeywords;
+        playerManager.loadItemOrdered(audioState, queryFinal, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                play(author, audioState, track);
+                track.setUserData(event.getAuthor().getId());
+                event.reply(":musical_note: Added to queue: " + track.getInfo().title);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                if (isKeywordsFinal) {
+                    AudioTrack track = playlist.getTracks().remove(0);
+                    track.setUserData(event.getAuthor().getId());
+                    play(author, audioState, track);
+                    event.reply(":musical_note: Added to queue: " + track.getInfo().title);
+                    return;
+                }
+
+                for (AudioTrack track : playlist.getTracks()) {
+                    audioState.scheduler.queue(track);
+                    track.setUserData(event.getAuthor().getId());
+                }
+                String response = String.format(
+                        ":musical_note: Added to queue: %s entries from %s", playlist.getTracks().size(), playlist.getName());
+                event.reply(response);
+            }
+
+            @Override
+            public void noMatches() {
+                event.reply(":x: Nothing found by **" + queryFinal + "**");
+            }
+
+            @Override
+            public void loadFailed(FriendlyException exception) {
+                event.reply(":x: Load failed: " + exception.getMessage());
             }
         });
     }

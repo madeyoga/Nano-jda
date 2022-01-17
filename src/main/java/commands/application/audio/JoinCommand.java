@@ -23,6 +23,6 @@ public class JoinCommand extends SlashCommand {
             return;
         }
         GuildAudioManager.connectToAuthorVoiceChannel(author);
-        event.getHook().sendMessage("Joined **" + author.getVoiceState().getChannel().getName() + "**").queue();
+        event.getHook().sendMessage(":mega: Joined `" + author.getVoiceState().getChannel().getName() + "`").queue();
     }
 }
