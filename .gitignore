@@ -13,6 +13,7 @@ scripts/listener/cache/*.json
 /build/
 build/
 Nano-java/build/
+settings.txt
 
 # Ignore Gradle GUI config
 gradle-app.setting
