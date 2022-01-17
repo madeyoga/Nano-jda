@@ -7,11 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-public class ClientProfile {
-
-    private final String token;
-    private final String prefix;
-    private final String ownerId;
+public record ClientProfile(String token, String prefix, String ownerId) {
 
     public ClientProfile(@NotNull String token, String prefix, String ownerId) {
         this.token = token;
@@ -34,7 +30,8 @@ public class ClientProfile {
                     case "token" -> token = line[1].trim();
                     case "prefix" -> prefix = line[1].trim();
                     case "owner" -> ownerId = line[1].trim();
-                    default -> {}
+                    default -> {
+                    }
                 }
             }
         }
@@ -46,17 +43,5 @@ public class ClientProfile {
         }
 
         return new ClientProfile(token, prefix, ownerId);
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public String getPrefix() {
-        return prefix;
-    }
-
-    public String getOwnerId() {
-        return ownerId;
     }
 }
