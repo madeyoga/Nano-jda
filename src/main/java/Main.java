@@ -24,7 +24,7 @@ public class Main {
     public static void main(String[] args) throws LoginException, FileNotFoundException, NullTokenException {
         ClientProfile clientProfile = ClientProfile.from("settings.txt");
 
-        JDABuilder jdaBuilder = JDABuilder.createDefault(clientProfile.getToken());
+        JDABuilder jdaBuilder = JDABuilder.createDefault(clientProfile.token());
         configureMemoryUsage(jdaBuilder);
 
         Command.Category audioCategory = new Command.Category("Audio Commands");
@@ -79,8 +79,8 @@ public class Main {
 
     public static CommandClientBuilder setupClientBuilderBasicInfo(CommandClientBuilder builder,
                                                                    ClientProfile profile) {
-        builder.setOwnerId(profile.getOwnerId());
-        builder.setPrefix(profile.getPrefix());
+        builder.setOwnerId(profile.ownerId());
+        builder.setPrefix(profile.prefix());
         builder.useHelpBuilder(false);
 
         return builder;
