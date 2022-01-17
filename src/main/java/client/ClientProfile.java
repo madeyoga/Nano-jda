@@ -29,11 +29,11 @@ public class ClientProfile {
         while (scanner.hasNextLine()) {
             String[] line = scanner.nextLine().split(":", 2);
             if (line.length > 1) {
-                String key = line[0].trim();
+                String key = line[0].trim().toLowerCase();
                 switch (key) {
                     case "token" -> token = line[1].trim();
                     case "prefix" -> prefix = line[1].trim();
-                    case "ownerId" -> ownerId = line[1].trim();
+                    case "owner" -> ownerId = line[1].trim();
                     default -> {}
                 }
             }
