@@ -61,7 +61,7 @@ public class YoutubeSearchCommand extends SlashCommand {
                     event.getHook().sendMessage(response)
                             .addActionRow(
                                     Button.primary(event.getId() + "-1", "1"),
-                                    Button.primary(event.getId() + "-cancel", "Cancel")
+                                    Button.danger(event.getId() + "-cancel", "Cancel")
                             )
                             .queue();
                 }
@@ -89,7 +89,7 @@ public class YoutubeSearchCommand extends SlashCommand {
                         if (i == 3) break;
                     }
 
-                    actions.add(Button.primary(event.getId() + "-cancel", "Cancel"));
+                    actions.add(Button.danger(event.getId() + "-cancel", "Cancel"));
 
                     waiter.register(new SearchCommandWaitingState(tracks,
                             event.getUser().getId(), event.getId(), event.getChannel().getId()));
