@@ -5,6 +5,8 @@
     <img src="https://top.gg/api/widget/458298539517411328.svg" alt="Nano" />
 </a>
 
+[Invite](https://discord.com/api/oauth2/authorize?client_id=458298539517411328&permissions=8&scope=applications.commands%20bot) NanoJ to your discord server 
+
 ## Requirements
 - Java >=14
 - Discord bot token
