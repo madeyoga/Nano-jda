@@ -22,6 +22,12 @@ import java.io.FileNotFoundException;
 
 public class Main {
     public static void main(String[] args) throws LoginException, FileNotFoundException, NullTokenException {
+        final int cores = Runtime.getRuntime().availableProcessors();
+        if (cores <= 1) {
+            System.out.println("Available Cores \"" + cores + "\", setting Parallelism Flag");
+            System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "1");
+        }
+
         ClientProfile clientProfile = ClientProfile.from("settings.txt");
 
         JDABuilder jdaBuilder = JDABuilder.createDefault(clientProfile.token());
@@ -35,7 +41,6 @@ public class Main {
         SearchCommandResponseListener searchWaiter = new SearchCommandResponseListener(audioManager);
 
         CommandClientBuilder clientBuilder = setupClientBuilderBasicInfo(new CommandClientBuilder(), clientProfile);
-        clientBuilder.forceGuildOnly("791580705892466689");
         clientBuilder.addSlashCommand(new JoinCommand(audioCategory));
         clientBuilder.addSlashCommand(new LoopCommand(audioManager, audioCategory));
         clientBuilder.addSlashCommand(new NowPlayCommand(audioManager, audioCategory));
@@ -63,7 +68,7 @@ public class Main {
 //        clientBuilder.addCommand(new commands.classic.audio.SkipCommand(audioManager, audioCategory));
 //        clientBuilder.addCommand(new commands.classic.audio.StopCommand(audioManager, audioCategory));
 
-        clientBuilder.setActivity(Activity.playing("development"));
+        clientBuilder.setActivity(Activity.playing("n>help | /help"));
 
         CommandClient commandClient = clientBuilder.build();
 
