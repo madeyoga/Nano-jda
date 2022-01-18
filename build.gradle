@@ -5,8 +5,6 @@ plugins {
 group 'Nano-Java.0.1'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 17
-
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
