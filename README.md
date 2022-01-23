@@ -5,7 +5,7 @@
     <img src="https://top.gg/api/widget/458298539517411328.svg" alt="Nano" />
 </a>
 
-Nano is a totally free and open source simple discord bot designed for Audio & Image sharing.
+Nano is a simple, totally free, and open source discord bot designed for Audio & Image sharing.
 
 [Invite](https://discord.com/api/oauth2/authorize?client_id=458298539517411328&permissions=8&scope=applications.commands%20bot) Nano to your discord server 
 
